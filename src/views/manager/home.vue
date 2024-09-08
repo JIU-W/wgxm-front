@@ -1,13 +1,12 @@
 <template>
-  <div id="app">
-    <router-view/>
-  </div>
+    <div>
+      这个是home页面
+    </div>
 </template>
 
 <script>
-
 export default {
-  name: 'App',
+  name: 'Home',
   data() {
     return {
 
@@ -16,6 +15,6 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style scoped lang="less">
 
 </style>
