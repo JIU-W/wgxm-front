@@ -1,10 +1,14 @@
-<script setup>
+<template>
+  <div>
+    <!-- 二级路由出口 -->
+    <router-view></router-view>
+
+  </div>
+</template>
+
+<script>
 
 </script>
-
-<template>
-
-</template>
 
 <style scoped lang="less">
 
