@@ -34,7 +34,8 @@ const routes = [
 ]
 
 const router = new VueRouter({
-    routes
+    routes,
+    mode: "history"
 })
 
 //全局前置导航守卫(在路由切换时触发，用于控制页面访问权限)

@@ -26,7 +26,7 @@ export default {
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  background-image: url('@/assets/imgs/logo.png'); /* 替换为你的背景图片路径 */
+  background-image: url('@/assets/imgs/404.png'); /* 替换为你的背景图片路径 */
   background-size: cover;
   background-position: center;
   color: #fff; /* 文本颜色 */

@@ -93,7 +93,7 @@ export default {
       this.$router.push('/adminPerson')
     },
     //退出登录
-    logout: function () {
+    logout(){
       this.$confirm('你确认要退出么？', '温馨提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
