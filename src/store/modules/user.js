@@ -16,6 +16,7 @@ export default {
         },
     },
     actions: {
+        //退出登录
         logout (context) {
             context.commit('setUserInfo', {})
         }

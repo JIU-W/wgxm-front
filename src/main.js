@@ -2,7 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-import '@/assets/css/styles.css'//引入全局样式
+import '@/assets/css/manager.css'//引入全局样式
 
 import request from '@/utils/request'
 
