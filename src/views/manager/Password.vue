@@ -3,14 +3,14 @@
     <el-card>
       <h3>修改密码</h3>
       <el-form ref="changePasswordForm" :model="form" :rules="rules" label-width="100px">
-        <el-form-item label="当前密码" prop="currentPassword">
-          <el-input type="password" v-model="form.currentPassword" autocomplete="current-password"></el-input>
+        <el-form-item label="当前密码" prop="password">
+          <el-input show-password type="password" v-model="form.password" autocomplete="current-password"></el-input>
         </el-form-item>
         <el-form-item label="新密码" prop="newPassword">
-          <el-input type="password" v-model="form.newPassword" autocomplete="new-password"></el-input>
+          <el-input show-password type="password" v-model="form.newPassword" autocomplete="new-password"></el-input>
         </el-form-item>
         <el-form-item label="确认新密码" prop="confirmNewPassword">
-          <el-input type="password" v-model="form.confirmNewPassword" autocomplete="new-password"></el-input>
+          <el-input show-password type="password" v-model="form.confirmNewPassword" autocomplete="new-password"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="submitForm('changePasswordForm')">提交</el-button>
@@ -29,12 +29,12 @@ export default {
     return {
       form: {
         userId: store.state.user.userInfo.userId,
-        currentPassword: '',
+        password: '',
         newPassword: '',
         confirmNewPassword: ''
       },
       rules: {
-        currentPassword: [
+        password: [
           { required: true, message: '请输入当前密码', trigger: 'blur' }
         ],
         newPassword: [
@@ -62,18 +62,18 @@ export default {
       this.$refs.changePasswordForm.validate((valid) => {
         if (valid) {
           //此处可以添加修改密码的逻辑
-          this.$request.put('/info/changePassword', this.form).then(res => {
+          this.$request.put('/userInfo/updatePassword', this.form).then(res => {
                 if (res.code === '200') {
-                  //密码修改成功
-                  this.$message.success('密码修改成功！');
+                  this.$message.success('密码修改成功！')
+                  this.resetForm()
                 } else {
                   //密码修改失败
-                  this.$message.error('密码修改失败！');
+                  this.$message.error(res.msg)
                 }
               }
           ).catch(error => {
-            console.error('修改密码请求失败：', error);
-            this.$message.error('修改密码请求失败，请检查网络连接或稍后再试。');
+            console.error('修改密码请求失败：', error)
+            this.$message.error('修改密码请求失败，请检查网络连接或稍后再试。')
           })
         } else {
           console.log('验证失败');
@@ -81,8 +81,10 @@ export default {
         }
       });
     },
-    resetForm(formName) {
-      this.$refs[formName].resetFields();
+
+    //重置表单
+    resetForm() {
+      this.$refs.changePasswordForm.resetFields();
     }
   }
 };

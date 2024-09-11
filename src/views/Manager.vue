@@ -55,6 +55,9 @@
             <el-menu-item style="color: #dddddd" index="/admin">
               管理员信息
             </el-menu-item>
+            <el-menu-item style="color: #dddddd" index="/user">
+              用户信息
+            </el-menu-item>
           </el-submenu>
         </el-menu>
       </div>
@@ -81,7 +84,7 @@ export default {
     }
   },
   created() {
-    console.log(this.user)
+    //console.log(this.user)
   },
   methods: {
     updateUser() {

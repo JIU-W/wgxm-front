@@ -9,6 +9,7 @@ import AdminPerson from '@/views/manager/AdminPerson.vue'
 import Password from '@/views/manager/Password.vue'
 import Admin from '@/views/manager/Admin.vue'
 import Notice from '@/views/manager/Notice.vue'
+import User from '@/views/manager/User.vue'
 
 import store from "@/store";
 
@@ -25,6 +26,7 @@ const routes = [
             {path: '/password', meta: { name: '修改密码' }, component: Password},
             {path: '/admin', meta: { name: '管理员信息' }, component: Admin},
             {path: '/notice', meta: { name: '公告信息' }, component: Notice},
+            {path: '/user', meta: { name: '用户信息' }, component: User},
         ]
 
     },

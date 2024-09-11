@@ -1,6 +1,6 @@
 <template>
   <div class="login-container">
-    <el-form :model="loginForm" :rules="rules" ref="formRef" label-position="top" class="login-form">
+    <el-form :model="loginForm" :rules="rules" ref="formRef" label-position="top" class="login-form" >
       <h2 class="login-title">wgxm管理系统</h2>
       <el-form-item prop="username" size="large">
         <el-input v-model="loginForm.username" prefix-icon="el-icon-user" placeholder="请输入账号"
@@ -26,8 +26,9 @@
                 </el-col>
               </el-row>
             </el-form-item>-->
-      <el-form-item>
-        <el-button type="primary" size="medium" @click="submitLogin">登录</el-button>
+      <el-form-item class="login-button-container">
+<!--        <el-button type="primary" size="medium" @click="submitLogin">登录</el-button>-->
+        <el-button type="primary" size="medium" @click="submitLogin" style="position: absolute; bottom: 0; right: 0;">登录</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -102,15 +103,24 @@ export default {
 .login-form {
   width: 300px;
   padding: 20px;
+  padding-bottom: 8px; /* 调整这个值以拉近按钮和表单下边界的距离 */
   border: 1px solid #ccc;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  position: relative; /* 确保按钮的绝对定位相对于此元素 */
 }
 
 .login-title {
   text-align: center;
   margin-bottom: 20px;
   color: #007bff;
+}
+
+.login-button-container {
+  margin-top: 10%; /* 调整这个值以保持按钮和密码输入框的距离 */
+  text-align: right; /* 将按钮右对齐 */
 }
 
 .captcha-img {
