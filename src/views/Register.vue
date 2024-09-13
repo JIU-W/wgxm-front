@@ -1,76 +1,99 @@
 <template>
-  <div class="register-container">
-    <el-form :model="registerForm" ref="registerForm" label-position="top" class="register-form">
-      <h2 class="register-title">Register</h2>
-      <!-- 用户名和密码部分 -->
-      <!-- ...（与登录页面相同） -->
-
-      <el-form-item label="Email">
-        <el-input v-model="registerForm.email" type="email" autocomplete="off"></el-input>
-      </el-form-item>
-
-      <el-form-item label="Confirm Password">
-        <el-input type="password" v-model="registerForm.confirmPassword" autocomplete="off"></el-input>
-      </el-form-item>
-
-      <!-- 验证码部分 -->
-      <!-- ...（与登录页面相同） -->
-
-      <el-form-item>
-        <el-button type="primary" @click="submitRegister">Register</el-button>
-      </el-form-item>
-    </el-form>
+  <div class="container">
+    <div style="width: 280px; padding: 50px; background-color: transparent;
+      background-color: transparent; border: 2px solid #888; border-radius: 5px;">
+      <div style="text-align: center; font-size: 24px; margin-bottom: 30px; color: #a95cc7">欢迎注册wgxm账号</div>
+      <el-form :model="form" :rules="rules" ref="formRef">
+        <el-form-item prop="username">
+          <el-input size="medium" prefix-icon="el-icon-user" placeholder="请输入用户名" v-model="form.username"></el-input>
+        </el-form-item>
+        <el-form-item prop="password">
+          <el-input size="medium" prefix-icon="el-icon-lock" placeholder="请输入密码" show-password  v-model="form.password"></el-input>
+        </el-form-item>
+        <el-form-item prop="confirmPass">
+          <el-input size="medium" prefix-icon="el-icon-lock" placeholder="请确认密码" show-password  v-model="form.confirmPass"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button size="medium" style="width: 100%; background-color: #2a60c9; border-color: #333; color: white" @click="register">注 册</el-button>
+        </el-form-item>
+        <div style="display: flex; align-items: center">
+          <div style="flex: 1"></div>
+          <div style="flex: 1; text-align: right; color: #cc4a4a; font-weight: bold;">
+            已有账号？请 <a href="/login">登录</a>
+          </div>
+        </div>
+      </el-form>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
+  name: "Register",
   data() {
+    //验证密码
+    const validatePassword = (rule, confirmPass, callback) => {
+      if (confirmPass === '') {
+        callback(new Error('请确认密码'))
+      } else if (confirmPass !== this.form.password) {
+        callback(new Error('两次输入的密码不一致'))
+      } else {
+        callback()
+      }
+    }
     return {
-      registerForm: {
-        username: '',
-        password: '',
-        confirmPassword: '',
-        email: '',
-        captcha: ''
-      },
-      captchaUrl: 'your-captcha-endpoint.php?' + Math.random().toString(36).substr(2, 9)
-    };
+      form: {},
+      rules: {
+        username: [
+          { required: true, message: '请输入账号', trigger: 'blur' },
+        ],
+        password: [
+          { required: true, message: '请输入密码', trigger: 'blur' },
+          { min: 6, message: '密码长度不能小于6位', trigger: 'blur'},
+          { pattern: /^(?=.*[A-Za-z])[A-Za-z\d]+$/, message: '密码必须至少包含一个字母', trigger: 'blur' }
+        ],
+        confirmPass: [
+          { validator: validatePassword, trigger: 'blur' }
+        ]
+      }
+    }
   },
+  created() {},
   methods: {
-    // 提交注册的逻辑与登录类似，但你可能需要添加额外的验证
-    submitRegister() {
-      this.$refs.registerForm.validate((valid) => {
-        if (valid && this.registerForm.password === this.registerForm.confirmPassword) {
-          // 这里添加注册逻辑，比如发送AJAX请求
-          alert('Registration successful!');
-          // 注意：实际项目中，你应该在这里调用API并处理响应
-        } else {
-          console.log('Validation failed or passwords do not match!');
-          return false;
+    register() {
+      this.$refs['formRef'].validate((valid) => {
+        if (valid) {
+          // 验证通过
+          this.$request.post('/user/register', {
+            userName: this.form.username,
+            password: this.form.password
+          }).then(res => {
+            if (res.code === '200') {
+              this.$router.push('/login')  //跳转登录页面
+              this.$message.success('注册成功')
+            } else {
+              this.$message.error(res.msg)
+            }
+          })
         }
-      });
-    },
-    // 验证码刷新与登录页面相同
-    // ...
+      })
+    }
   }
-  // 验证码刷新方法与登录页面相同，无需重复
-};
+}
 </script>
 
 <style scoped>
-/* 样式与登录页面类似，但类名需要更改以避免冲突 */
-.register-container {
-  /* ...（与登录页面相同） */
+.container {
+  height: 100vh;
+  overflow: hidden;
+  background-image: url("@/assets/imgs/img.png");
+  background-size: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
 }
-
-.register-form {
-  /* ...（与登录页面相同） */
+a {
+  color: #2a60c9;
 }
-
-.register-title {
-  /* ...（与登录页面相同，但类名更改） */
-}
-
-/* 验证码样式无需更改，因为它在登录和注册页面中是相同的 */
 </style>

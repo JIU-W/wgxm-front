@@ -32,7 +32,7 @@ const routes = [
     },
     {path: '/login', meta: { name: '登录' }, component: Login},
     {path: '/register', meta: { name: '注册' }, component: Register},
-    {path:'*', meta: { name: '无法访问' }, component: NotFind}
+    {path: '*', meta: { name: '无法访问' }, component: NotFind}
 ]
 
 const router = new VueRouter({

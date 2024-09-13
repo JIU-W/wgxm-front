@@ -13,5 +13,6 @@ module.exports = defineConfig({
           args[0].title = "wgxm管理系统";
           return args;
         })
-  }
+  },
+
 })

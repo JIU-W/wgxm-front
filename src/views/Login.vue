@@ -3,33 +3,38 @@
     <el-form :model="loginForm" :rules="rules" ref="formRef" label-position="top" class="login-form" >
       <h2 class="login-title">wgxm管理系统</h2>
       <el-form-item prop="username" size="large">
-        <el-input v-model="loginForm.username" prefix-icon="el-icon-user" placeholder="请输入账号"
+        <el-input v-model="loginForm.username" prefix-icon="el-icon-user" placeholder="请输入用户名"
                   autocomplete="off"></el-input>
       </el-form-item>
       <el-form-item prop="password">
-        <el-input type="password" v-model="loginForm.password" prefix-icon="el-icon-lock" placeholder="请输入密码"
+        <el-input type="password" v-model="loginForm.password" prefix-icon="el-icon-lock" placeholder="请输入密码" show-password
                   autocomplete="off"></el-input>
       </el-form-item>
-      <!--      <el-form-item label="验证码">
-              <el-row>
+            <el-form-item label="图片验证码">
+              <el-row :gutter="20">
+                <el-col :span="12">
+                  <el-input v-model="loginForm.captcha"></el-input>
+                </el-col>
                 <el-col :span="12">
                   <el-image
                       class="captcha-img"
+                      alt="Captcha"
                       fit="fill"
                       :src="captchaUrl"
                       @click="refreshCaptcha"
-                      style="cursor: pointer; width: 100%; height: 40px;"
                   ></el-image>
                 </el-col>
-                <el-col :span="12">
-                  <el-input v-model="loginForm.captcha" placeholder="Enter captcha"></el-input>
-                </el-col>
               </el-row>
-            </el-form-item>-->
+            </el-form-item>
       <el-form-item class="login-button-container">
-<!--        <el-button type="primary" size="medium" @click="submitLogin">登录</el-button>-->
         <el-button type="primary" size="medium" @click="submitLogin" style="position: absolute; bottom: 0; right: 0;">登录</el-button>
       </el-form-item>
+      <div style="display: flex; align-items: center">
+        <div style="flex: 1"></div>
+        <div style="flex: 1; text-align: right; color: black; font-weight: bold; font-size: 14px; ">
+          还没有账号？请 <a href="/register">注册</a>
+        </div>
+      </div>
     </el-form>
   </div>
 </template>
@@ -46,24 +51,31 @@ export default {
       },
       rules: {
         username: [
-          {required: true, message: '请输入账号', trigger: 'blur'},
-          /*{ min: 3, max: 10, message: '长度在 3 到 10 个字符', trigger: 'blur' }*/
+          {required: true, message: '请输入用户名', trigger: 'blur'},
         ],
         password: [
           {required: true, message: '请输入密码', trigger: 'blur'},
         ]
       },
-      captchaUrl: 'your-captcha-endpoint.php?' + Math.random().toString(36).substr(2, 9)
+      captchaUrl: ''
     };
   },
+  created() {
+    this.refreshCaptcha()
+  },
   methods: {
+    //刷新验证码
+    refreshCaptcha() {
+      this.captchaUrl = 'http://localhost:9010/user/checkCode?' + new Date().getTime();//加时间戳：确保每次请求的URL都是唯一的，避免浏览器缓存。
+    },
     submitLogin() {
       this.$refs.formRef.validate((valid) => {
         if (valid) {
           //登录逻辑
           this.$request.post('/user/login', {
-                userName: this.loginForm.username,
-                password: this.loginForm.password
+            userName: this.loginForm.username,
+            password: this.loginForm.password,
+            checkCode: this.loginForm.captcha
           }).then(res => {
             if (res.code === '200') {
               //登录成功，保存用户信息到vuex和本地存储
@@ -71,10 +83,12 @@ export default {
               this.$message.success('登录成功')
               this.$router.push('/home')  // 跳转主页
             }else {
+              //登录失败，刷新图片验证码
+              this.refreshCaptcha()
               this.$message.error(res.msg)
             }
           }).catch(error => {
-            // 处理请求失败的情况
+            //处理请求失败的情况
             console.error('登录请求失败：', error);
             this.$message.error('登录请求失败，请检查网络连接或稍后再试。');
           });
@@ -83,9 +97,6 @@ export default {
           return false;
         }
       });
-    },
-    refreshCaptcha() {
-      this.captchaUrl = 'your-captcha-endpoint.php?' + Math.random().toString(36).substr(2, 9);
     }
   }
 };
@@ -126,6 +137,7 @@ export default {
 .captcha-img {
   width: 100%;
   cursor: pointer;
+  height: 35px;
 }
 
 </style>

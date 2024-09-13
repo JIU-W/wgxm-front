@@ -9,7 +9,7 @@ import store from "@/store";
 
 // 创建一个新的axios实例
 const request = axios.create({
-    baseURL: 'http://localhost:9010',
+    baseURL: 'http://localhost:9010',   //process.env.VUE_APP_BASEURL
     timeout: 5000,
 })
 
