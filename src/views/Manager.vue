@@ -17,7 +17,7 @@
       <div class="manager-header-right">
         <el-dropdown placement="bottom">
           <div class="avatar">
-            <img :src="user.avatar ? user.avatar : 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png' "/>
+            <img :src="user.avatar ? user.avatar : this.$baseUrl + '/file/getAvatar/defaultAvatar.jpg' "/>
             <div>{{ user.name || '管理员' }}</div>
           </div>
           <el-dropdown-menu slot="dropdown">
@@ -73,7 +73,6 @@
 
 <script>
 
-import {getInfo} from "@/utils/storage";
 import store from "@/store";
 
 export default {
@@ -88,7 +87,7 @@ export default {
   },
   methods: {
     updateUser() {
-      //this.user = JSON.parse(localStorage.getItem('xm-user') || '{}')   // 重新获取下用户的最新信息
+      //this.user = this.$store.state.user.userInfo  //重新获取下用户的最新信息
     },
 
     //跳转到个人信息页面

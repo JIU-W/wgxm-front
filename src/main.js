@@ -9,6 +9,8 @@ import request from '@/utils/request'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 
+Vue.prototype.$baseUrl = process.env.VUE_APP_BASEURL;
+
 Vue.use(ElementUI,{size: "small", zIndex: 3000})
 
 Vue.prototype.$request = request
