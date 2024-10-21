@@ -20,14 +20,14 @@
         <el-table-column prop="name" label="昵称"></el-table-column>
         <el-table-column prop="phone" label="电话"></el-table-column>
         <el-table-column prop="email" label="邮箱"></el-table-column>
-<!--        <el-table-column label="头像">
+        <el-table-column label="头像">
           <template v-slot="scope">
             <div style="display: flex; align-items: center">
               <el-image style="width: 40px; height: 40px; border-radius: 50%" v-if="scope.row.avatar"
                         :src="scope.row.avatar" :preview-src-list="[scope.row.avatar]"></el-image>
             </div>
           </template>
-        </el-table-column>-->
+        </el-table-column>
         <el-table-column prop="role" label="角色"></el-table-column>
         <el-table-column prop="sex" label="性别"></el-table-column>
         <el-table-column prop="info" label="个人简介"></el-table-column>
@@ -68,12 +68,15 @@
         <el-form-item label="邮箱" prop="email">
           <el-input v-model="form.email" placeholder="邮箱"></el-input>
         </el-form-item>
-<!--        <el-form-item label="头像">
-          <el-upload class="avatar-uploader" :action="$baseUrl + '/files/upload'" :headers="{ token: user.token }"
-                     list-type="picture" :on-success="handleAvatarSuccess">
+        <el-form-item label="头像">
+          <el-upload class="avatar-uploader"
+                     :action="this.$baseUrl + '/file/uploadAvatar'"
+                     :headers="{ authentication: user.token }"
+                     list-type="picture"
+                     :on-success="handleAvatarSuccess">
             <el-button type="primary">上传头像</el-button>
           </el-upload>
-        </el-form-item>-->
+        </el-form-item>
         <el-form-item label="性别" prop="sex">
           <el-radio-group v-model="form.sex">
             <el-radio label="男"></el-radio>
@@ -99,6 +102,8 @@
 </template>
 
 <script>
+import store from "@/store";
+
 export default {
   name: "User",
   data() {
@@ -111,7 +116,7 @@ export default {
       name: null,
       fromVisible: false,
       form: {},
-      //user: JSON.parse(localStorage.getItem('xm-user') || '{}'),
+      user: store.state.user.userInfo,
       rules: {
         userName: [
           { required: true, message: '请输入用户名', trigger: 'blur' },
@@ -212,10 +217,15 @@ export default {
       this.pageSize = size;
       this.load(this.pageNum);  // 重新加载数据
     },
-    /*handleAvatarSuccess(response, file, fileList) {
-      // 把头像属性换成上传的图片的链接
-      this.form.avatar = response.data
-    },*/
+    handleAvatarSuccess(response, file, fileList) {
+      if (response) {
+        //把头像属性换成上传的图片的链接
+        //this.$set 是 Vue 提供的一个全局方法，用于向响应式对象上添加属性，并确保新属性也是响应式的，同时能够触发视图更新。
+        this.$set(this.form, 'avatar', this.$baseUrl + response.data);
+      } else {
+        console.error('头像上传成功，但未获取到图片URL')
+      }
+    },
   }
 }
 </script>

@@ -6,6 +6,7 @@
           <el-upload
               class="avatar-uploader"
               :action=" this.$baseUrl + '/file/uploadAvatar'"
+              :headers="{ authentication: user.token }"
               :show-file-list="false"
               :on-success="handleAvatarSuccess"
               :before-upload="beforeAvatarUpload"
@@ -62,23 +63,13 @@ export default {
   },
   methods: {
     update() {
-      // 创建一个新的对象，除了avata 属性外，其余属性都与this.use 相同
-      const newAvatar = this.user.avatar.lastIndexOf("/file/getAvatar")
-      const updatedUserDb = {
-        ...this.user,
-        avatar: this.user.avatar.substring(newAvatar)
-      };
-
       // 保存当前的用户信息到数据库
-      this.$request.put('/userInfo/update', updatedUserDb).then(res => {
-        console.log(updatedUserDb.avatar)
-
+      this.$request.put('/userInfo/update', this.user).then(res => {
         if (res.code === '200') {
           // 成功更新
           this.$message.success('保存成功')
 
-          // 更新浏览器缓存里的用户信息(缓存和vuex里面用户头像信息还是存这个
-          // http://localhost:9010/file/getAvatar/14b5787b-8007-44f1-b44d-53f1dd3b8b04.webp)形式的URL
+          //更新浏览器缓存里的用户信息
           store.commit('user/setUserInfo', this.user)
 
           //触发父级的数据更新(更改了vuex和缓存的数据，不在需要在父级重新更新数据了)
