@@ -6,11 +6,9 @@ import lodash from 'lodash';
 import { Loading } from 'element-ui';
 import store from "@/store";
 
-//api替换路径！！！！！
-
 // 创建一个新的axios实例
 const request = axios.create({
-    baseURL: 'http://localhost:9010',   //process.env.VUE_APP_BASEURL
+    baseURL: '/api',
     timeout: 5000,
 })
 
